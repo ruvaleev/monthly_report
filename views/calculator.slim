@@ -29,34 +29,14 @@ form action="/calculate" method='post'
       - previous_month = Time.now.month - 1
       - Date::MONTHNAMES.each_with_index do |month, index|
         - unless month.nil?
-          <option #{'selected' if index == previous_month} value="#{index}">"#{month}"</option>
+          - value = index < 10 ? "0#{index}" : index
+          <option #{'selected' if index == previous_month} value="#{value}">"#{month}"</option>
 
 
 
   h4 Monthly income
   p
     input type="integer" name="monthly_income" placeholder='Monthly Income'
-  h4 Total expenses
-  p
-    input type="integer" name="total_expenses" placeholder='Total Expenses (Заполняется общей суммой всех расходов)'
-  h4 Business
-  p
-    input type="integer" name="business" placeholder='Заполняется суммой расходов за месяц с отметкой #business'
-  h4 Investments
-  p
-    input type="integer" name="investments" value='0'
-  h4 Out of budget
-  p
-    input type="integer" name="out_of_budget" placeholder='Заполняется суммой расходов за месяц с отметкой #out_of_budget'
-  h4 In count of next months expenses
-  p
-    input type="integer" name="in_count_of_next_months_expenses" placeholder='Заполняется суммой расходов за месяц с отметкой #in_count_of_next_months_expenses'
-  h4 Visa questions
-  p
-    input type="integer" name="visa_questions" placeholder='Заплоняется суммой перевода на счет Visa Questions Account' value='4300'
-  h4 Internet Fee
-  p
-    input type="integer" name="internet_fee" placeholder='Total Expenses (Заполняется общей суммой всех расходов)' value='700'
   h4 Monthly Budget
   p
     input type="integer" name="monthly_budget" value='40000'

@@ -38,7 +38,7 @@ class ReportGenerator
 
   def calculate_used_budget
     budget_expenses = @total_expenses + @visa_questions + @internet_fee + @from_previous_months_in_count_of_current
-    non_budget_expenses = @out_of_budget - @investments - @business - @in_count_of_next_months_expenses
+    non_budget_expenses = @out_of_budget - @investments - @business - @next_months_expenses
     budget_expenses - non_budget_expenses
   end
 
@@ -59,7 +59,7 @@ class ReportGenerator
       writer << ['Monthly free money', @monthly_free_money]
       writer << ['Total free money', @free_money_total]
       writer << ['Funds for investments', @funds_for_investments]
-      writer << ['In count of next month spent', @in_count_of_next_months_expenses]
+      writer << ['In count of next month spent', @next_months_expenses]
     end
   end
 
