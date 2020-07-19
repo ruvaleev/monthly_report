@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'ffaker'
 gem 'rspec'
 gem 'rubocop'
 gem 'sinatra'
