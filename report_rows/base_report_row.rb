@@ -13,6 +13,10 @@ class BaseReportRow
     handle_result
   end
 
+  def countable_result
+    @total_amount
+  end
+
   private
 
   def handle_result; end

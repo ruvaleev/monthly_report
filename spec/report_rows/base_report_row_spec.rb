@@ -47,4 +47,15 @@ RSpec.describe BaseReportRow do
       expect(@subject).to have_received(:handle_result)
     end
   end
+
+  describe '#countable_result' do
+    before do
+      @total_amount = BigDecimal(rand(1000..10_000).to_s)
+      @subject.instance_variable_set('@total_amount', @total_amount)
+    end
+
+    it 'returns @total_amount' do
+      expect(@subject.countable_result).to eq @total_amount
+    end
+  end
 end

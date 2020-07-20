@@ -3,10 +3,6 @@
 require_relative 'base_report_row'
 
 class TotalExpensesReportRow < BaseReportRow
-  def countable_result
-    @total_amount
-  end
-
   def printable_result
     "total_expenses = #{@total_amount} # Заполняется общей суммой всех расходов"
   end
