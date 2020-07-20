@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'base_report_row'
+require_relative '../base_report_row'
 
 class TagsBasedReportRow < BaseReportRow
   def printable_result

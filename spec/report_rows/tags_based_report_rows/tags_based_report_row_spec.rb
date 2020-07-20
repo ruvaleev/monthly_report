@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../spec_helper'
-require_relative '../../report_rows/tags_based_report_row'
+require_relative '../../spec_helper'
+require_relative '../../../report_rows/tags_based_report_rows/tags_based_report_row'
 
 RSpec.describe TagsBasedReportRow do
   before do
