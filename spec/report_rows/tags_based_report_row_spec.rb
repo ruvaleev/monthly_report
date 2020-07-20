@@ -7,19 +7,18 @@ RSpec.describe TagsBasedReportRow do
   before do
     @subject = described_class.new
     @total_amount = BigDecimal(rand(1000..10_000).to_s)
-    @subject.instance_variable_set('@total_amount', @total_amount)
+    @tags_name = BaseReportRow::TAGS.keys.sample
+    @tag_body = BaseReportRow::TAGS[@tags_name]
 
-    first_class_name_word = FFaker::Name.first_name
-    last_class_name_word = FFaker::Name.first_name
-    allow(described_class).to receive(:name).and_return("#{first_class_name_word}#{last_class_name_word}")
-    @tags_name = "#{first_class_name_word.downcase}_#{last_class_name_word.downcase}"
+    @subject.instance_variable_set('@total_amount', @total_amount)
+    allow(described_class).to receive(:name).and_return(@tags_name.to_s.split('_').map(&:capitalize).join)
   end
 
   describe '#printable_result' do
-    it 'returns appropriate result depends on class name and amount' do
+    it 'returns appropriate result depends on tags_body and amount' do
       expect(
         @subject.printable_result
-      ).to eq "#{@tags_name} = #{@total_amount} # Заполняется суммой расходов за месяц с отметкой ##{@tags_name}"
+      ).to eq "#{@tags_name} = #{@total_amount} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
     end
   end
 end

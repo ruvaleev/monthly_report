@@ -38,7 +38,7 @@ class RowFactory < BaseFactory
   end
 
   def fake_tags
-    ['', 'business', 'investments', 'out_of_budget', 'next_months_expenses'].sample
+    ['', 'Business', 'Investments', 'Out of budget', "In count of next month's expenses"].sample
   end
 
   def fake_sum_in_local_currency

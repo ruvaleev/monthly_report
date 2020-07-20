@@ -2,7 +2,8 @@
 
 RSpec.shared_examples 'tags_based_row' do |tags|
   before do
-    rows_with_tags = RowFactory.new.create_list(rand(2..4), tags: tags, operation_type: 'Расход')
+    @tag_body = BaseReportRow::TAGS[tags.to_sym]
+    rows_with_tags = RowFactory.new.create_list(rand(2..4), tags: @tag_body, operation_type: 'Расход')
     other_rows = RowFactory.new.create_list(rand(2..4), tags: FFaker::Lorem.word)
     rows = rows_with_tags + other_rows
 
@@ -18,6 +19,6 @@ RSpec.shared_examples 'tags_based_row' do |tags|
   it 'returns appropriate representation' do
     expect(
       @subject.printable_result
-    ).to eq "#{tags} = #{@expenses_with_tags} # Заполняется суммой расходов за месяц с отметкой ##{tags}"
+    ).to eq "#{tags} = #{@expenses_with_tags} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
   end
 end
