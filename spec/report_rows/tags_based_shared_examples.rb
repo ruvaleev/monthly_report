@@ -11,7 +11,7 @@ RSpec.shared_examples 'tags_based_row' do |tags|
     rows.each { |row| @subject.parse(row) }
   end
 
-  it 'counts only investments expenses' do
+  it "counts only #{tags} expenses" do
     expect(@subject.countable_result).to eq @expenses_with_tags
   end
 
