@@ -6,11 +6,13 @@ class ComplexReportRow < BaseReportRow
   def handle_non_export_data(from_previous_months_in_count_of_current: 0,
                              previous_months_funds_for_investments: 0,
                              previous_months_free_money: 0,
-                             monthly_budget: 40_000)
+                             monthly_budget: 40_000,
+                             monthly_income: 0)
     @from_previous_months_in_count_of_current = from_previous_months_in_count_of_current
     @previous_months_funds_for_investments    = previous_months_funds_for_investments
     @previous_months_free_money               = previous_months_free_money
     @monthly_budget                           = monthly_budget
+    @monthly_income                           = monthly_income
 
     correct_output_values_with_non_export_data
   end
