@@ -16,6 +16,10 @@ class FundsForInvestmentsReportRow < ComplexReportRow
     ].join
   end
 
+  def total_printable_result
+    "Funds for investments: #{@total_amount}"
+  end
+
   private
 
   def correct_output_values_with_non_export_data

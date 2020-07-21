@@ -7,6 +7,10 @@ class MonthlyFreeMoneyReportRow < ComplexReportRow
     ['monthly_free_money = monthly_budget - used_budget', "\n", " => #{@total_amount}"].join
   end
 
+  def total_printable_result
+    "Monthly free money: #{@total_amount}"
+  end
+
   private
 
   def correct_output_values_with_non_export_data

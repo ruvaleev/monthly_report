@@ -58,4 +58,10 @@ RSpec.describe BaseReportRow do
       expect(@subject.countable_result).to eq @total_amount
     end
   end
+
+  describe '#total_printable_result' do
+    it 'returns returns nil' do
+      expect(@subject.total_printable_result).to be nil
+    end
+  end
 end

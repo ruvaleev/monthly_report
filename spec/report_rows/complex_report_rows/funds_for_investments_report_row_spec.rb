@@ -24,6 +24,7 @@ RSpec.describe FundsForInvestmentsReportRow do
       ['funds_for_investments = monthly_income + previous_months_funds_for_investments',
        ' - used_budget - out_of_budget - free_money_total - investments - business',
        ' - next_months_expenses', "\n", "=> #{@total_amount}"].join
+    @total_result_string = "Funds for investments: #{@total_amount}"
 
     @subject = described_class.new
     rows.each { |row| @subject.parse(row) }

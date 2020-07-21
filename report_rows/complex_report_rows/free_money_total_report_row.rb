@@ -7,6 +7,10 @@ class FreeMoneyTotalReportRow < MonthlyFreeMoneyReportRow
     "free_money_total = monthly_free_money + previous_months_free_money \n => #{@total_amount}"
   end
 
+  def total_printable_result
+    "Total free money: #{@total_amount}"
+  end
+
   private
 
   def correct_output_values_with_non_export_data

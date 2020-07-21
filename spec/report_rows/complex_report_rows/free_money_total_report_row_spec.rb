@@ -8,6 +8,7 @@ RSpec.describe FreeMoneyTotalReportRow do
   before do
     @total_amount = 0
     @result_string = "free_money_total = monthly_free_money + previous_months_free_money \n => #{@total_amount}"
+    @total_result_string = "Total free money: #{@total_amount}"
     @subject = described_class.new
   end
 

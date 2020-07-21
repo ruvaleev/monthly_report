@@ -29,6 +29,8 @@ class BaseReportRow
     @total_amount
   end
 
+  def total_printable_result; end
+
   private
 
   def handle_result; end
