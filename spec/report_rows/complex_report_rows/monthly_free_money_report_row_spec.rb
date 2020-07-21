@@ -31,7 +31,7 @@ RSpec.describe MonthlyFreeMoneyReportRow do
   describe '#handle_non_export_data' do
     before { @monthly_budget = rand(20_000..50_000) }
 
-    it 'should increment @total_amount with @monthly_budget' do
+    it 'increments @total_amount with @monthly_budget' do
       expect do
         @subject.handle_non_export_data(monthly_budget: @monthly_budget)
       end.to change { @subject.instance_variable_get('@total_amount') }.by(@monthly_budget)
