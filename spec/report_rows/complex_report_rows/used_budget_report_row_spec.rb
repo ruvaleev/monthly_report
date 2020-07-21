@@ -2,6 +2,7 @@
 
 require_relative '../../spec_helper'
 require_relative '../../../report_rows/complex_report_rows/used_budget_report_row'
+require_relative 'complex_rows_shared_examples'
 
 RSpec.describe UsedBudgetReportRow do
   before do
@@ -20,24 +21,19 @@ RSpec.describe UsedBudgetReportRow do
     decremental_rows_sum = rows_total_sum(expenses_rows_with_decremental_tags)
 
     @total_amount = incremental_rows_sum - decremental_rows_sum
+    @result_string = ['used_budget = ', ' total_expenses', ' + visa_questions', ' + internet_fee',
+                      ' + from_previous_months_in_count_of_current', ' - out_of_budget', ' - investments',
+                      ' - business', ' - from_last_months_remains', ' - in_count_of_next_months_expenses',
+                      "\n", " => #{@total_amount}"].join
     @subject = described_class.new
     rows.each { |row| @subject.parse(row) }
   end
 
-  it 'counts only expenses' do
-    expect(@subject.countable_result).to eq @total_amount
-  end
-
-  it 'returns appropriate representation' do
-    expect(
-      @subject.printable_result
-    ).to eq result_string
-  end
+  it_behaves_like 'complex_row'
 
   describe '#handle_non_export_data' do
-    before do
-      @in_count_of_next_months_expenses = rand(1000..10_000)
-    end
+    before { @in_count_of_next_months_expenses = rand(1000..10_000) }
+
     it "should increment @total_amount with value of 'In count of next month spent' row" do
       expect do
         @subject.handle_non_export_data(from_previous_months_in_count_of_current: @in_count_of_next_months_expenses)
@@ -68,10 +64,4 @@ end
 
 def rows_total_sum(rows)
   rows.inject(0) { |i, row| i + BigDecimal(row[7]) }
-end
-
-def result_string
-  ['used_budget = ', ' total_expenses', ' + visa_questions', ' + internet_fee',
-   ' + from_previous_months_in_count_of_current', ' - out_of_budget', ' - investments', ' - business',
-   ' - from_last_months_remains', ' - in_count_of_next_months_expenses', "\n", " => #{@total_amount}"].join
 end
