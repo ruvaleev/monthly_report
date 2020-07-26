@@ -1,4 +1,9 @@
-/reports
-/exports
 .byebug_history
 .DS_Store
+.idea
+.vscode
+
+/reports
+/exports
+/spec/support/*
+!/spec/support/test_export.csv
