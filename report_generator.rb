@@ -2,10 +2,15 @@
 
 require_relative 'config'
 
-class ReportGenerator
+class ReportGenerator # rubocop:disable Metrics/ClassLength
   attr_reader :report_rows
 
   SIMPLE_ROWS = [
+    MonthlyBudgetReportRow,
+    MonthlyIncomeReportRow,
+    FromPreviousMonthsInCountOfCurrentReportRow,
+    PreviousMonthsFreeMoneyReportRow,
+    PreviousMonthsFundsForInvestmentsReportRow,
     TotalExpensesReportRow,
     BusinessReportRow,
     InvestmentsReportRow,

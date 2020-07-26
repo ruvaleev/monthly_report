@@ -4,6 +4,8 @@ require_relative '../helpers'
 
 class BaseReportRow
   attr_reader :total_amount
+  attr_reader :printable_result
+  attr_reader :total_printable_result
 
   TAGS = {
     business: 'Business',
@@ -29,11 +31,19 @@ class BaseReportRow
     handle_result
   end
 
-  attr_reader :printable_result
+  def handle_non_export_data(from_previous_months_in_count_of_current: 0,
+                             previous_months_funds_for_investments: 0,
+                             previous_months_free_money: 0,
+                             monthly_budget: 40_000,
+                             monthly_income: 0)
+    @from_previous_months_in_count_of_current = from_previous_months_in_count_of_current
+    @previous_months_funds_for_investments    = previous_months_funds_for_investments
+    @previous_months_free_money               = previous_months_free_money
+    @monthly_budget                           = monthly_budget
+    @monthly_income                           = monthly_income
 
-  attr_reader :total_printable_result
-
-  def handle_non_export_data(*args); end
+    correct_output_values_with_non_export_data
+  end
 
   private
 
@@ -54,4 +64,6 @@ class BaseReportRow
   end
 
   def handle_result; end
+
+  def correct_output_values_with_non_export_data; end
 end
