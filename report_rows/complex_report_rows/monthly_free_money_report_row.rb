@@ -4,11 +4,12 @@ require_relative 'complex_report_row'
 
 class MonthlyFreeMoneyReportRow < ComplexReportRow
   def printable_result
-    ['monthly_free_money = monthly_budget - used_budget', "\n", " => #{@total_amount}"].join
+    @printable_result =
+      ['monthly_free_money = monthly_budget - used_budget', "\n", " => #{printable(@total_amount)}"].join
   end
 
   def total_printable_result
-    "Monthly free money: #{@total_amount}"
+    @total_printable_result = "Monthly free money: #{printable(@total_amount)}"
   end
 
   private

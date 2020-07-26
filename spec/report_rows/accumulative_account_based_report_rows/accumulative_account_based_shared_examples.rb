@@ -13,13 +13,9 @@ RSpec.shared_examples 'accumulative_account_based_row' do |account_name|
     rows.each { |row| @subject.parse(row) }
   end
 
-  it "counts only #{account_name} transfers" do
-    expect(@subject.countable_result).to eq @transfers_to_account
-  end
-
-  it 'returns appropriate representation' do
-    expect(
-      @subject.printable_result
-    ).to eq "#{account_name} = #{@transfers_to_account} # Заплоняется суммой перевода на счет ##{@account_body}"
+  it "counts only #{account_name} transfers and returns appropriate representation" do
+    expected_string =
+      "#{account_name} = #{printable(@transfers_to_account)} # Заплоняется суммой перевода на счет ##{@account_body}"
+    expect(@subject.printable_result).to eq expected_string
   end
 end

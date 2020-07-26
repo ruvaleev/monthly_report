@@ -3,7 +3,6 @@
 require_relative '../../spec_helper'
 require_relative '../../../report_rows/complex_report_rows/funds_for_investments_report_row'
 require_relative 'complex_rows_shared_examples'
-require 'byebug'
 
 RSpec.describe FundsForInvestmentsReportRow do
   before do
@@ -23,8 +22,8 @@ RSpec.describe FundsForInvestmentsReportRow do
     @result_string =
       ['funds_for_investments = monthly_income + previous_months_funds_for_investments',
        ' - used_budget - out_of_budget - free_money_total - investments - business',
-       ' - next_months_expenses', "\n", "=> #{@total_amount}"].join
-    @total_result_string = "Funds for investments: #{@total_amount}"
+       ' - next_months_expenses', "\n", "=> #{printable(@total_amount)}"].join
+    @total_result_string = "Funds for investments: #{printable(@total_amount)}"
 
     @subject = described_class.new
     rows.each { |row| @subject.parse(row) }

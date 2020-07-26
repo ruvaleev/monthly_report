@@ -3,19 +3,11 @@
 require_relative 'complex_report_row'
 
 class UsedBudgetReportRow < ComplexReportRow
-  def printable_result # rubocop:disable Metrics/MethodLength
-    ['used_budget = ',
-     ' total_expenses',
-     ' + visa_questions',
-     ' + internet_fee',
-     ' + from_previous_months_in_count_of_current',
-     ' - out_of_budget',
-     ' - investments',
-     ' - business',
-     ' - from_last_months_remains',
-     ' - in_count_of_next_months_expenses',
-     "\n",
-     " => #{@total_amount}"].join
+  def printable_result
+    @printable_result = ['used_budget = total_expenses + visa_questions + internet_fee',
+                         ' + from_previous_months_in_count_of_current - out_of_budget',
+                         ' - investments - business - from_last_months_remains',
+                         ' - in_count_of_next_months_expenses', "\n", " => #{printable(@total_amount)}"].join
   end
 
   private

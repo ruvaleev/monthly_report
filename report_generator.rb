@@ -1,85 +1,120 @@
 # frozen_string_literal: true
 
-require 'csv'
-require 'bigdecimal'
+require_relative 'config'
 
 class ReportGenerator
-  Result = Struct.new(:report)
+  attr_reader :report_rows
 
-  def initialize(params)
-    params.each { |key, value| instance_variable_set("@#{key}", BigDecimal(value)) }
-    @month = params[:month].to_i
-    @year = params[:year].to_i
+  SIMPLE_ROWS = [
+    TotalExpensesReportRow,
+    BusinessReportRow,
+    InvestmentsReportRow,
+    OutOfBudgetReportRow,
+    NextMonthsExpensesReportRow,
+    VisaQuestionsReportRow,
+    InternetFeeReportRow
+  ].freeze
+  COMPLEX_ROWS = [
+    UsedBudgetReportRow,
+    MonthlyFreeMoneyReportRow,
+    FreeMoneyTotalReportRow,
+    FundsForInvestmentsReportRow
+  ].freeze
+  EXPORT_FILE = 'exports/CoinKeeper_export.csv'
+  REPORT_DIRECTORY = 'reports'
+
+  def initialize(params:, rows: SIMPLE_ROWS + COMPLEX_ROWS, export_file: nil, report_directory: nil)
+    @year = params[:year]
+    @month = params[:month]
+    @monthly_budget = big_decimal_value(params[:monthly_budget])
+    @monthly_income = big_decimal_value(params[:monthly_income])
+    @report_rows = rows.map(&:new) unless rows.nil?
+    @export_file = export_file || EXPORT_FILE
+    @report_directory = report_directory || REPORT_DIRECTORY
   end
 
   def run
-    dig_previous_month_values
-    calculate_values
-    normalize_variables
-    generate_csv_report
-    Result.new(collect_all_variables)
+    parse_export_file
+    write_previous_report_data
+    self
+  end
+
+  def to_html
+    "<h1># #{Date::MONTHNAMES[@month.to_i]}</h1>" \
+      '<h3>Вводные данные</h3>' +
+      report_rows.map { |row| "<div>#{row.printable_result}</div>" }.join +
+      '</br>' \
+      '<div>TOTAL:</div>' +
+      report_rows.map { |row| "<div>#{row.total_printable_result}</div>" }.join
+  end
+
+  def to_csv
+    file = "#{@report_directory}/#{@month.to_i}_#{@year.to_i}.csv"
+    CSV.open(file, 'w') do |writer|
+      report_rows.each { |row| writer << [row.total_printable_result] unless row.total_printable_result.nil? }
+    end
   end
 
   private
 
+  def parse_export_file
+    select_operations_from_export_file
+    parse_operations
+  end
+
+  def select_operations_from_export_file
+    file             = read_export_file
+    normalized_month = @month.to_s.length < 2 ? @month.to_s.prepend('0') : @month
+    @operations      = file.select { |row| can_include_in_report?(row, normalized_month, @year) }
+  end
+
+  def read_export_file
+    CSV.parse(File.read(@export_file), col_sep: "\;")
+  rescue CSV::MalformedCSVError
+    CSV.parse(File.read(@export_file))
+  end
+
+  def can_include_in_report?(row, month, year)
+    row[0]&.include?(".#{month}.#{year}")
+  end
+
+  def parse_operations
+    @operations.each do |row|
+      @report_rows.each { |row_service| row_service.parse(row) }
+    end
+  end
+
+  def write_previous_report_data
+    dig_previous_month_values
+    params = {
+      from_previous_months_in_count_of_current: @from_previous_months_in_count_of_current,
+      previous_months_funds_for_investments: @previous_months_funds_for_investments,
+      previous_months_free_money: @previous_months_free_money,
+      monthly_budget: @monthly_budget,
+      monthly_income: @monthly_income
+    }
+
+    @report_rows.each { |row_service| row_service.handle_non_export_data(params) }
+  end
+
   def dig_previous_month_values
     previous_month                            = parse_previous_month_report
-    @from_previous_months_in_count_of_current = BigDecimal(previous_month['In count of next month spent'])
-    @previous_months_funds_for_investments    = BigDecimal(previous_month['Funds for investments'])
-    @previous_months_free_money               = BigDecimal(previous_month['Total free money'])
-  end
-
-  def calculate_values
-    @used_budget = calculate_used_budget
-    @monthly_free_money = @monthly_budget - @used_budget
-    @free_money_total = @monthly_free_money + @previous_months_free_money
-    @funds_for_investments = calculate_funds_for_investments
-  end
-
-  def calculate_used_budget
-    budget_expenses = @total_expenses + @visa_questions + @internet_fee + @from_previous_months_in_count_of_current
-    non_budget_expenses = @out_of_budget - @investments - @business - @next_months_expenses
-    budget_expenses - non_budget_expenses
-  end
-
-  def calculate_funds_for_investments
-    income = @monthly_income + @previous_months_funds_for_investments
-    expenses = @used_budget - @free_money_total - @investments - @business
-    income - expenses
-  end
-
-  def normalize_variables
-    instance_variables.each { |var| instance_variable_set(var, instance_variable_get(var).to_f) }
-  end
-
-  def generate_csv_report
-    file = "reports/#{@month.to_i}_#{@year.to_i}.csv"
-    @month = Date::MONTHNAMES[@month]
-    CSV.open(file, 'w') do |writer|
-      writer << ['Monthly free money', @monthly_free_money]
-      writer << ['Total free money', @free_money_total]
-      writer << ['Funds for investments', @funds_for_investments]
-      writer << ['In count of next month spent', @next_months_expenses]
-    end
+    @from_previous_months_in_count_of_current = big_decimal_value(previous_month['In count of next month spent'])
+    @previous_months_funds_for_investments    = big_decimal_value(previous_month['Funds for investments'])
+    @previous_months_free_money               = big_decimal_value(previous_month['Total free money'])
   end
 
   def parse_previous_month_report
-    if @month == 1
-      previous_month = 12
-      previous_year = @year - 1
-    else
-      previous_month = @month - 1
-      previous_year = @year
-    end
+    previous_month, previous_year = define_previous_month_and_year
 
-    previous_file_name = "reports/#{previous_month}_#{previous_year}.csv"
+    previous_file_name = "#{@report_directory}/#{previous_month}_#{previous_year}.csv"
+    return Hash.new(0) unless File.exist?(previous_file_name)
+
     file = File.read(previous_file_name)
-    CSV.parse(file, col_sep: "\;").to_h
+    CSV.parse(file, col_sep: "\:").to_h
   end
 
-  def collect_all_variables
-    instance_variables.each_with_object({}) do |var, result|
-      result[var.to_s.gsub('@', '').to_sym] = instance_variable_get(var)
-    end
+  def define_previous_month_and_year
+    @month.to_i == 1 ? [12, @year.to_i - 1] : [@month.to_i - 1, @year]
   end
 end

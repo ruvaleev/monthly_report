@@ -5,20 +5,14 @@ require_relative 'base_factory'
 
 class RowFactory < BaseFactory
   def create(*args)
-    row_cells.each_with_object({}) { |key, hash| hash[key] = send("fake_#{key}") }.merge(custom_params(args)).values
+    define_attributes(args).values
   end
 
   private
 
-  def row_cells
+  def attributes
     %i[date operation_type source_account destination_account tags sum_in_local_currency
        local_currency sum_in_common_currency common_currency repeat_parameter note]
-  end
-
-  def custom_params(args)
-    return {} if args.nil? || !args.first.is_a?(Hash)
-
-    args.first.select { |key, _value| row_cells.include?(key) }
   end
 
   def fake_date

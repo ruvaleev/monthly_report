@@ -9,14 +9,14 @@ RSpec.describe NextMonthsExpensesReportRow do
 
   describe '#total_printable_result' do
     before do
-      next_months_expense = rand(0..1_000)
+      next_months_expense = rand(0..1_000).to_s
       row = RowFactory.new.create(operation_type: 'Расход',
                                   sum_in_common_currency: next_months_expense,
                                   tags: BaseReportRow::TAGS[:next_months_expenses])
 
       @subject = described_class.new
       @subject.parse(row)
-      @total_result_string = "In count of next month spent: #{BigDecimal(next_months_expense)}"
+      @total_result_string = "In count of next month spent: #{printable(BigDecimal(next_months_expense))}"
     end
 
     it 'returns appropriate representation for total' do

@@ -4,7 +4,7 @@ require_relative 'base_report_row'
 
 class TotalExpensesReportRow < BaseReportRow
   def printable_result
-    "total_expenses = #{@total_amount} # Заполняется общей суммой всех расходов"
+    "total_expenses = #{printable(@total_amount)} # Заполняется общей суммой всех расходов"
   end
 
   private

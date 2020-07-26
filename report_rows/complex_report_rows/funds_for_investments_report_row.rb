@@ -9,15 +9,16 @@ class FundsForInvestmentsReportRow < ComplexReportRow
   end
 
   def printable_result
-    [
-      'funds_for_investments = monthly_income + previous_months_funds_for_investments',
-      ' - used_budget - out_of_budget - free_money_total - investments - business',
-      ' - next_months_expenses', "\n", "=> #{@total_amount}"
-    ].join
+    @printable_result ||=
+      [
+        'funds_for_investments = monthly_income + previous_months_funds_for_investments',
+        ' - used_budget - out_of_budget - free_money_total - investments - business',
+        ' - next_months_expenses', "\n", "=> #{printable(@total_amount)}"
+      ].join
   end
 
   def total_printable_result
-    "Funds for investments: #{@total_amount}"
+    @total_printable_result ||= "Funds for investments: #{printable(@total_amount)}"
   end
 
   private

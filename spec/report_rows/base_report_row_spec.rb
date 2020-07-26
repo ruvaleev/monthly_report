@@ -48,17 +48,6 @@ RSpec.describe BaseReportRow do
     end
   end
 
-  describe '#countable_result' do
-    before do
-      @total_amount = BigDecimal(rand(1000..10_000).to_s)
-      @subject.instance_variable_set('@total_amount', @total_amount)
-    end
-
-    it 'returns @total_amount' do
-      expect(@subject.countable_result).to eq @total_amount
-    end
-  end
-
   describe '#total_printable_result' do
     it 'returns returns nil' do
       expect(@subject.total_printable_result).to be nil

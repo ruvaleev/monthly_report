@@ -18,7 +18,7 @@ RSpec.describe AccumulativeAccountBasedReportRow do
     it 'returns appropriate result depends on tags_body and amount' do
       expect(
         @subject.printable_result
-      ).to eq "#{@account_name} = #{@total_amount} # Заплоняется суммой перевода на счет ##{@account_body}"
+      ).to eq "#{@account_name} = #{printable(@total_amount)} # Заплоняется суммой перевода на счет ##{@account_body}"
     end
   end
 end

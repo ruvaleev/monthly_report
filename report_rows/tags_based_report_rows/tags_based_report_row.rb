@@ -4,7 +4,8 @@ require_relative '../base_report_row'
 
 class TagsBasedReportRow < BaseReportRow
   def printable_result
-    "#{row_class_name} = #{@total_amount} # Заполняется суммой расходов за месяц с отметкой ##{tag_body}"
+    @printable_result =
+      "#{row_class_name} = #{printable(@total_amount)} # Заполняется суммой расходов за месяц с отметкой ##{tag_body}"
   end
 
   private

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require_relative '../helpers'
+
 class BaseReportRow
+  attr_reader :total_amount
+
   TAGS = {
     business: 'Business',
     investments: 'Investments',
@@ -21,19 +25,17 @@ class BaseReportRow
     @operation_type         = row[1]
     @destination_account    = row[3]
     @tag                    = row[4]
-    @amount                 = BigDecimal(row[7])
+    @amount                 = big_decimal_value(row[7])
     handle_result
   end
 
-  def countable_result
-    @total_amount
-  end
+  attr_reader :printable_result
 
-  def total_printable_result; end
+  attr_reader :total_printable_result
+
+  def handle_non_export_data(*args); end
 
   private
-
-  def handle_result; end
 
   def row_class_name
     @row_class_name ||= to_downcase(self.class.name.gsub('ReportRow', ''))
@@ -50,4 +52,6 @@ class BaseReportRow
   def account_name
     @account_name ||= ACCUMULATIVE_ACCOUNTS[row_class_name.to_sym]
   end
+
+  def handle_result; end
 end

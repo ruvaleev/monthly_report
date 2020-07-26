@@ -16,9 +16,9 @@ RSpec.describe TagsBasedReportRow do
 
   describe '#printable_result' do
     it 'returns appropriate result depends on tags_body and amount' do
-      expect(
-        @subject.printable_result
-      ).to eq "#{@tags_name} = #{@total_amount} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
+      expected_string =
+        "#{@tags_name} = #{printable(@total_amount)} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
+      expect(@subject.printable_result).to eq expected_string
     end
   end
 end

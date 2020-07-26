@@ -14,13 +14,9 @@ RSpec.describe TotalExpensesReportRow do
     rows.each { |row| @subject.parse(row) }
   end
 
-  it 'counts only expenses' do
-    expect(@subject.countable_result).to eq @total_expenses
-  end
-
-  it 'returns appropriate representation' do
+  it 'counts only expenses and returns appropriate representation' do
     expect(
       @subject.printable_result
-    ).to eq "total_expenses = #{@total_expenses} # Заполняется общей суммой всех расходов"
+    ).to eq "total_expenses = #{printable(@total_expenses)} # Заполняется общей суммой всех расходов"
   end
 end

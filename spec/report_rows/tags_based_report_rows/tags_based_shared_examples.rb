@@ -12,13 +12,9 @@ RSpec.shared_examples 'tags_based_row' do |tags|
     rows.each { |row| @subject.parse(row) }
   end
 
-  it "counts only #{tags} expenses" do
-    expect(@subject.countable_result).to eq @expenses_with_tags
-  end
-
-  it 'returns appropriate representation' do
-    expect(
-      @subject.printable_result
-    ).to eq "#{tags} = #{@expenses_with_tags} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
+  it "counts only #{tags} expenses and returns appropriate representation" do
+    expected_string =
+      "#{tags} = #{printable(@expenses_with_tags)} # Заполняется суммой расходов за месяц с отметкой ##{@tag_body}"
+    expect(@subject.printable_result).to eq expected_string
   end
 end

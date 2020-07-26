@@ -21,10 +21,10 @@ RSpec.describe UsedBudgetReportRow do
     decremental_rows_sum = rows_total_sum(expenses_rows_with_decremental_tags)
 
     @total_amount = incremental_rows_sum - decremental_rows_sum
-    @result_string = ['used_budget = ', ' total_expenses', ' + visa_questions', ' + internet_fee',
+    @result_string = ['used_budget = ', 'total_expenses', ' + visa_questions', ' + internet_fee',
                       ' + from_previous_months_in_count_of_current', ' - out_of_budget', ' - investments',
                       ' - business', ' - from_last_months_remains', ' - in_count_of_next_months_expenses',
-                      "\n", " => #{@total_amount}"].join
+                      "\n", " => #{printable(@total_amount)}"].join
     @subject = described_class.new
     rows.each { |row| @subject.parse(row) }
   end

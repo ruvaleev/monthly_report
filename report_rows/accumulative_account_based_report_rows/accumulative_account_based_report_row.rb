@@ -4,7 +4,7 @@ require_relative '../base_report_row'
 
 class AccumulativeAccountBasedReportRow < BaseReportRow
   def printable_result
-    "#{row_class_name} = #{@total_amount} # Заплоняется суммой перевода на счет ##{account_name}"
+    "#{row_class_name} = #{printable(@total_amount)} # Заплоняется суммой перевода на счет ##{account_name}"
   end
 
   private

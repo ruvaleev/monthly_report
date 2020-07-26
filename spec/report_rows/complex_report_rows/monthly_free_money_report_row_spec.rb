@@ -21,8 +21,9 @@ RSpec.describe MonthlyFreeMoneyReportRow do
     decremental_rows_sum = rows_total_sum(expenses_rows + transfer_rows_to_decremental_accounts)
 
     @total_amount = incremental_rows_sum - decremental_rows_sum
-    @result_string = ['monthly_free_money = monthly_budget - used_budget', "\n", " => #{@total_amount}"].join
-    @total_result_string = "Monthly free money: #{@total_amount}"
+    @result_string =
+      ['monthly_free_money = monthly_budget - used_budget', "\n", " => #{printable(@total_amount)}"].join
+    @total_result_string = "Monthly free money: #{printable(@total_amount)}"
     @subject = described_class.new
     rows.each { |row| @subject.parse(row) }
   end
