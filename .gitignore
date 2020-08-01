@@ -5,5 +5,7 @@
 
 /reports
 /exports
-/spec/support/*
-!/spec/support/test_export.csv
+.byebug_history
+.DS_Store
+.idea/
+.vscode/
